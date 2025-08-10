@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Crack Detection</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 2rem;
+      background: #f8f9fa;
+      font-family: Arial, sans-serif;
+    }
+    .logo {
+      max-width: 700px;  /* Same as index.html */
+      width: 100%;
+      display: block;
+      margin: 20px auto; /* Center horizontally */
+    }
+    .container {
+      max-width: 700px;
+      width: 100%;
+      background: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    a.home-link {
+      margin-bottom: 1rem;
+      display: inline-block;
+      color: #0d6efd;
+      text-decoration: none;
+    }
+    a.home-link:hover {
+      text-decoration: underline;
+    }
+    img.result-img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgb(0 0 0 / 0.1);
+      margin-bottom: 0.5rem;
+    }
+    .grid {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .grid > div {
+      flex: 1;
+      text-align: center;
+      background: #ffffff;
+      border-radius: 0.8rem;
+      padding: 1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .btn-center {
+      display: flex;
+      justify-content: center;
+    }
+    .section-title {
+      text-align: center;
+      font-weight: 700;
+      margin-top: 20px;
+      margin-bottom: 15px;
+      color: #2c3e50;
+    }
+    .sub-title {
+      text-align: center;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: #34495e;
+    }
+    .list-group-item {
+      font-size: 1.05rem;
+      border: none;
+      background: #fdfdfd;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Logo -->
+  <img src="{{ url_for('static', filename='BSbasicboxhightran1.png') }}" class="logo" alt="BrickSense Logo">
+
+  <div class="container">
+    <!-- Home Link -->
+    <a href="{{ url_for('index') }}" class="home-link">← Home</a>
+
+    {% if error %}
+      <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data" class="mb-4">
+      <div class="mb-3">
+        <label for="file" class="form-label">Upload wall image</label>
+        <input type="file" class="form-control" id="file" name="file" accept="image/*" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="sensitivity" class="form-label">Sensitivity</label>
+        <input type="number" class="form-control" id="sensitivity" name="sensitivity" value="9" min="0" max="12" step="1">
+      </div>
+
+      <div class="btn-center">
+        <button type="submit" class="btn btn-primary">Upload & Analyze</button>
+      </div>
+    </form>
+
+    {% if filename %}
+      <h3 class="section-title">Results</h3>
+
+      <div class="grid">
+        <div>
+          <p class="sub-title">Original</p>
+          <img src="{{ url_for('uploaded_file', filename=fname_border) }}" alt="Original" class="result-img">
+        </div>
+        <div>
+          <p class="sub-title">Contours / Localization</p>
+          <img src="{{ url_for('uploaded_file', filename=fname_contours) }}" alt="Contours" class="result-img">
+        </div>
+      </div>
+
+      <h4 class="section-title">Prediction Probabilities</h4>
+      <ul class="list-group text-center">
+        <li class="list-group-item">
+          <span class="fw-bold text-success">Normal</span> — 
+          <span class="badge bg-success rounded-pill">{{ probs[0]|round(2) }}%</span>
+        </li>
+        <li class="list-group-item">
+          <span class="fw-bold text-danger">Cracked</span> — 
+          <span class="badge bg-danger rounded-pill">{{ probs[1]|round(2) }}%</span>
+        </li>
+        <li class="list-group-item">
+          <span class="fw-bold text-secondary">Not a Wall</span> — 
+          <span class="badge bg-secondary rounded-pill">{{ probs[2]|round(2) }}%</span>
+        </li>
+      </ul>
+    {% endif %}
+  </div>
+
+</body>
+</html>
