@@ -83,15 +83,51 @@ def run_tflite_inference(interpreter, inputs):
     output_data = interpreter.get_tensor(output_details[0]['index'])
     return output_data
 
-# Load tflite models (update filenames if needed)
+# # Load tflite models (update filenames if needed)
+# try:
+#     strength_model = load_tflite_model(os.path.join(MODEL_FOLDER, "brick_FlexureStrength_Reg_model_epoch50.tflite"))
+#     class_model = load_tflite_model(os.path.join(MODEL_FOLDER, "brick_classification_model trial 2.tflite"))
+#     absorption_model = load_tflite_model(os.path.join(MODEL_FOLDER, "brick_absorption_Model.tflite"))
+# except Exception as e:
+#     # If models missing, set to None and show errors on pages
+#     strength_model = class_model = absorption_model = None
+#     print("Error loading tflite models:", e)
+import traceback  # add this at the top of the file if not already imported
+
+print("Checking contents of models folder:")
 try:
-    strength_model = load_tflite_model(os.path.join(MODEL_FOLDER, "brick_FlexureStrength_Reg_model_epoch50.tflite"))
-    class_model = load_tflite_model(os.path.join(MODEL_FOLDER, "brick_classification_model trial 2.tflite"))
-    absorption_model = load_tflite_model(os.path.join(MODEL_FOLDER, "brick_absorption_Model.tflite"))
+    model_files = os.listdir(MODEL_FOLDER)
+    print(model_files)
 except Exception as e:
-    # If models missing, set to None and show errors on pages
-    strength_model = class_model = absorption_model = None
-    print("Error loading tflite models:", e)
+    print(f"Error listing model folder '{MODEL_FOLDER}': {e}")
+
+strength_model = None
+class_model = None
+absorption_model = None
+
+try:
+    print(f"Loading strength model: {os.path.join(MODEL_FOLDER, 'brick_FlexureStrength_Reg_model_epoch50.tflite')}")
+    strength_model = load_tflite_model(os.path.join(MODEL_FOLDER, "brick_FlexureStrength_Reg_model_epoch50.tflite"))
+    print("Strength model loaded successfully")
+except Exception as e:
+    print("Error loading strength model:")
+    traceback.print_exc()
+
+try:
+    print(f"Loading class model: {os.path.join(MODEL_FOLDER, 'brick_classification_model trial 2.tflite')}")
+    class_model = load_tflite_model(os.path.join(MODEL_FOLDER, "brick_classification_model trial 2.tflite"))
+    print("Class model loaded successfully")
+except Exception as e:
+    print("Error loading class model:")
+    traceback.print_exc()
+
+try:
+    print(f"Loading absorption model: {os.path.join(MODEL_FOLDER, 'brick_absorption_Model.tflite')}")
+    absorption_model = load_tflite_model(os.path.join(MODEL_FOLDER, "brick_absorption_Model.tflite"))
+    print("Absorption model loaded successfully")
+except Exception as e:
+    print("Error loading absorption model:")
+    traceback.print_exc()
 
 # -------------------------
 # APP2: Keras model load
