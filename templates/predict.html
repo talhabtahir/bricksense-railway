@@ -111,10 +111,13 @@
           <p class="text-danger fw-bold">This is not a brick. Please upload a valid brick image.</p>
         {% else %}
           <!-- Stylized Prediction Box -->
-          <div class="prediction-box text-center">
-            <h5 class="text-primary mb-3">Prediction Results</h5>
-            <p class="mb-1"><strong>Estimated Flexural Load:</strong> {{ strength }} kN</p>
-            <p class="mb-0"><strong>Estimated Water Absorption:</strong> {{ absorption }} %</p>
+          <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #ddd; margin-top: 15px;">
+              <p style="font-size: 1.1rem; font-weight: 500; color: #0d6efd; margin-bottom: 8px;">
+                  <strong>Estimated Flexural Load:</strong> {{ strength }} kN
+              </p>
+              <p style="font-size: 1.1rem; font-weight: 500; color: #0d6efd;">
+                  <strong>Estimated Water Absorption:</strong> {{ absorption }} %
+              </p>
           </div>
 
 
