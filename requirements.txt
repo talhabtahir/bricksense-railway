@@ -1,0 +1,8 @@
+flask
+tensorflow
+pillow
+numpy
+opencv-python-headless
+ultralytics
+matplotlib
+keras
