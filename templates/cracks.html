@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Crack Detection</title>
+  <style> body{font-family:Arial;margin:20px;} img{max-width:320px;margin:6px;} .grid{display:flex;gap:10px;flex-wrap:wrap;} </style>
+</head>
+<body>
+  <a href="{{ url_for('index') }}">← Home</a>
+  <h2>Detect Brick Wall Cracks</h2>
+
+  {% if error %}
+    <div style="color:red">{{ error }}</div>
+  {% endif %}
+
+  <form method="post" enctype="multipart/form-data">
+    <label>Upload wall image</label><br>
+    <input type="file" name="file" accept="image/*" required><br><br>
+    <label>Sensitivity</label>
+    <input type="number" name="sensitivity" value="9" min="0" max="12" step="1"><br><br>
+    <button type="submit">Upload & Analyze</button>
+  </form>
+
+  {% if filename %}
+    <h3>Results</h3>
+    <div class="grid">
+      <div>
+        <p>Original</p>
+        <img src="{{ url_for('uploaded_file', filename=fname_border) }}">
+      </div>
+      <div>
+        <p>Contours / Localization</p>
+        <img src="{{ url_for('uploaded_file', filename=fname_contours) }}">
+      </div>
+      <div>
+        <p>Heatmap</p>
+        <img src="{{ url_for('uploaded_file', filename=fname_heatmap) }}">
+      </div>
+      <div>
+        <p>Overlay</p>
+        <img src="{{ url_for('uploaded_file', filename=fname_overlay) }}">
+      </div>
+    </div>
+    <h4>Prediction probabilities</h4>
+    <ul>
+      <li>Normal: {{ probs[0]|round(2) }}%</li>
+      <li>Cracked: {{ probs[1]|round(2) }}%</li>
+      <li>Not a Wall: {{ probs[2]|round(2) }}%</li>
+    </ul>
+  {% endif %}
+</body>
+</html>
