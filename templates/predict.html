@@ -110,8 +110,11 @@
         {% if not_brick %}
           <p class="text-danger fw-bold">This is not a brick. Please upload a valid brick image.</p>
         {% else %}
-          <p><strong>Estimated Flexural Load:</strong> {{ strength }} kN</p>
-          <p><strong>Estimated Water Absorption:</strong> {{ absorption }} %</p>
+          <div style="font-size: 1.2rem; color: #0d6efd; background: #f8f9fa; padding: 12px; border-radius: 8px; margin-top: 15px; text-align: center; font-weight: bold;">
+            <p style="margin: 0 0 5px 0;">Estimated Flexural Load: {{ strength }} kN</p>
+            <p style="margin: 0;">Estimated Water Absorption: {{ absorption }} %</p>
+          </div>
+
 
           <h4 class="section-title">Classification Probabilities</h4>
           <ul class="list-group text-center">
