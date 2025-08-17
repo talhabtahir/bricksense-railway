@@ -1,4 +1,4 @@
-<!-- <!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -52,46 +52,3 @@
   </style>
 </head>
 <body>
-
-  <!-- Logo -->
-  <img src="{{ url_for('static', filename='BSbasicboxhightran1.png') }}" alt="BrickSense Logo" class="logo">
-
-  <!-- Card Section -->
-  <div class="card text-center">
-    <div class="heading-main">Welcome to BrickSense</div>
-    <div class="subtext">
-      <p><strong>Predict Brick Properties</strong> — flexural load & water absorption</p>
-      <p><strong>Detect Brick Wall Cracks</strong> — heatmap + localization</p>
-    </div>
-    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-      <a href="{{ url_for('predict') }}" class="btn btn-primary btn-custom">Predict Brick Properties</a>
-      <a href="{{ url_for('cracks') }}" class="btn btn-primary btn-custom">Detect Wall Cracks</a>
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <footer>
-    Developed with TensorFlow | © 2025 BrickSense
-  </footer>
-
-</body>
-</html>
- -->
-{% extends "base.html" %}
-{% block content %}
-<div class="text-center py-16">
-  <h1 class="text-4xl font-bold mb-4">Welcome to BrickIQ</h1>
-  <p class="text-lg mb-8 max-w-2xl mx-auto">
-    AI-powered predictions for brick quality, strength, absorption, and crack detection. 
-    Upload your brick images and let our models do the rest.
-  </p>
-  <div class="space-x-4">
-    <a href="/predict" class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700">
-      Try Brick Properties
-    </a>
-    <a href="/cracks" class="bg-green-600 text-white px-6 py-3 rounded-lg shadow hover:bg-green-700">
-      Try Crack Detection
-    </a>
-  </div>
-</div>
-{% endblock %}
