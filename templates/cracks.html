@@ -1,4 +1,4 @@
-<!doctype html>
+<!-- <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -83,7 +83,7 @@
   </style>
 </head>
 <body>
-
+-->
   <!-- Logo -->
   <img src="{{ url_for('static', filename='BSbasicboxhightran1.png') }}" class="logo" alt="BrickSense Logo">
 
@@ -145,3 +145,51 @@
 
 </body>
 </html>
+ -->
+
+ {% extends "base.html" %}
+{% block content %}
+<h2 class="text-2xl font-bold mb-6">Crack Detection</h2>
+
+<form method="POST" enctype="multipart/form-data" class="bg-white shadow p-6 rounded-lg mb-8">
+  <div class="mb-4">
+    <label class="block mb-2 font-semibold">Upload Wall Image</label>
+    <input type="file" name="file" accept="image/*" class="block w-full text-sm text-gray-600">
+  </div>
+  <div class="mb-4">
+    <label class="block mb-2 font-semibold">Sensitivity (default = 9)</label>
+    <input type="number" name="sensitivity" min="1" max="20" value="9" class="w-full border rounded p-2">
+  </div>
+  <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Detect</button>
+</form>
+
+{% if error %}
+  <div class="bg-red-100 text-red-700 p-4 rounded mb-6">{{ error }}</div>
+{% endif %}
+
+{% if predicted_class is defined %}
+  <div class="p-6 bg-white shadow rounded-lg mb-8 text-center">
+    <h3 class="font-bold text-lg mb-2">Prediction Result</h3>
+    <p class="text-xl">Predicted Class: <span class="font-bold text-green-600">{{ predicted_class }}</span></p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="bg-white p-4 shadow rounded-lg">
+      <h4 class="font-semibold mb-2">Original Image</h4>
+      <img src="{{ url_for('uploaded_file', filename=fname_border) }}" class="rounded shadow">
+    </div>
+    <div class="bg-white p-4 shadow rounded-lg">
+      <h4 class="font-semibold mb-2">Heatmap</h4>
+      <img src="{{ url_for('uploaded_file', filename=fname_heatmap) }}" class="rounded shadow">
+    </div>
+    <div class="bg-white p-4 shadow rounded-lg">
+      <h4 class="font-semibold mb-2">Contours</h4>
+      <img src="{{ url_for('uploaded_file', filename=fname_contours) }}" class="rounded shadow">
+    </div>
+    <div class="bg-white p-4 shadow rounded-lg">
+      <h4 class="font-semibold mb-2">Overlay</h4>
+      <img src="{{ url_for('uploaded_file', filename=fname_overlay) }}" class="rounded shadow">
+    </div>
+  </div>
+{% endif %}
+{% endblock %}
