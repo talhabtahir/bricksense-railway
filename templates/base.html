@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ title or "BrickIQ" }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+  <!-- Navbar -->
+  <nav class="bg-white shadow p-4 flex justify-between items-center">
+    <a href="/" class="text-2xl font-bold text-blue-600">BrickIQ</a>
+    <div class="space-x-6">
+      <a href="/predict" class="hover:text-blue-600">Brick Properties</a>
+      <a href="/cracks" class="hover:text-blue-600">Crack Detection</a>
+    </div>
+  </nav>
+
+  <!-- Main content -->
+  <main class="container mx-auto px-4 py-8">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-100 text-center py-6 mt-12 text-gray-600">
+    <p>© 2025 BrickIQ. All rights reserved.</p>
+  </footer>
+</body>
+</html>
