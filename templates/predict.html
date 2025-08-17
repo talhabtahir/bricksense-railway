@@ -1,4 +1,4 @@
-<!doctype html>
+<!-- <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -72,7 +72,7 @@
   </style>
 </head>
 <body>
-
+-->
   <!-- Logo -->
   <img src="{{ url_for('static', filename='BSbasicboxhightran1.png') }}" class="logo" alt="BrickSense Logo">
 
@@ -173,3 +173,46 @@
 
 </body>
 </html>
+ -->
+
+{% extends "base.html" %}
+{% block content %}
+<h2 class="text-2xl font-bold mb-6">Brick Properties Prediction</h2>
+
+<form method="POST" enctype="multipart/form-data" class="bg-white shadow p-6 rounded-lg mb-8">
+  <div class="mb-4">
+    <label class="block mb-2 font-semibold">Upload Brick Image</label>
+    <input type="file" name="file" accept="image/*" class="block w-full text-sm text-gray-600">
+  </div>
+  <div class="mb-4">
+    <label class="block mb-2 font-semibold">Dry Weight (grams)</label>
+    <input type="number" name="dry_weight" step="0.01" placeholder="2800" class="w-full border rounded p-2">
+  </div>
+  <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Predict</button>
+</form>
+
+{% if error %}
+  <div class="bg-red-100 text-red-700 p-4 rounded mb-6">{{ error }}</div>
+{% endif %}
+
+{% if strength %}
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="p-6 bg-white shadow rounded-lg text-center">
+      <h3 class="font-bold text-lg mb-2">Strength</h3>
+      <p class="text-2xl text-blue-600">{{ strength }} kN</p>
+    </div>
+    <div class="p-6 bg-white shadow rounded-lg text-center">
+      <h3 class="font-bold text-lg mb-2">Absorption</h3>
+      <p class="text-2xl text-green-600">{{ absorption }}%</p>
+    </div>
+    <div class="p-6 bg-white shadow rounded-lg text-center">
+      <h3 class="font-bold text-lg mb-2">Class</h3>
+      <p class="text-2xl text-purple-600">Class {{ class_idx + 1 }}</p>
+    </div>
+  </div>
+
+  <div class="mt-8">
+    <img src="{{ url_for('uploaded_file', filename=filename) }}" class="mx-auto rounded shadow max-h-80">
+  </div>
+{% endif %}
+{% endblock %}
