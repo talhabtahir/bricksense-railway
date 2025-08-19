@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>BrickSense</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      background: #f8f9fa;
+      font-family: Arial, sans-serif;
+    }
+    .logo {
+      max-width: 700px;  /* same size */
+      width: 100%;
+      display: block;
+      margin: 20px auto; /* center horizontally */
+    }
+    .card {
+      max-width: 700px;
+      width: 100%;
+      padding: 1.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      background: white;
+      border: none;
+    }
+    .btn-custom {
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      font-weight: 500;
+      border-radius: 0.5rem;
+    }
+    footer {
+      margin-top: 2rem;
+      font-size: small;
+      color: #666;
+    }
+    .heading-main {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #0d6efd;
+      margin-bottom: 1rem;
+    }
+    .subtext {
+      font-size: 1rem;
+      color: #555;
+      margin-bottom: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Logo -->
+  <img src="{{ url_for('static', filename='BSbasicboxhightran1.png') }}" alt="BrickSense Logo" class="logo">
+
+  <!-- Card Section -->
+  <div class="card text-center">
+    <div class="heading-main">Welcome to BrickSense</div>
+    <div class="subtext">
+      <p><strong>Predict Brick Properties</strong> — flexural load & water absorption</p>
+      <p><strong>Detect Brick Wall Cracks</strong> — heatmap + localization</p>
+    </div>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+      <a href="{{ url_for('predict') }}" class="btn btn-primary btn-custom">Predict Brick Properties</a>
+      <a href="{{ url_for('cracks') }}" class="btn btn-primary btn-custom">Detect Wall Cracks</a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    Developed with TensorFlow | © 2025 BrickSense
+  </footer>
+
+</body>
+</html>
