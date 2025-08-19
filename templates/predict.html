@@ -12,22 +12,48 @@
       justify-content: flex-start;
       align-items: center;
       padding: 2rem;
-      background: #f8f9fa;
       font-family: Arial, sans-serif;
+
+      /* Background image */
+      background: url("{{ url_for('static', filename='background.jpg') }}") no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
     }
-    .container {
-      max-width: 700px;
-      width: 100%;
-      background: white;
-      padding: 2rem;
-      border-radius: 1rem;
-      box-shadow: 0 0 15px rgb(0 0 0 / 0.1);
+
+    /* Dark overlay (0.8 darkness) */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 0;
     }
+
+    .logo, .container {
+      position: relative;
+      z-index: 1;
+    }
+
     .logo {
       max-width: 700px;
       display: block;
       margin: 0 auto 1rem;
     }
+
+    /* Glassmorphism Container */
+    .container {
+      max-width: 700px;
+      width: 100%;
+      padding: 2rem;
+      border-radius: 1rem;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      color: #fff;
+    }
+
     a.home-link {
       margin-bottom: 1rem;
       display: inline-block;
@@ -37,37 +63,47 @@
     a.home-link:hover {
       text-decoration: underline;
     }
+
     .uploaded-img {
       max-width: 100%;
       height: auto;
       border-radius: 8px;
       margin-bottom: 1rem;
-      box-shadow: 0 0 10px rgb(0 0 0 / 0.1);
+      box-shadow: 0 0 10px rgb(0 0 0 / 0.2);
     }
+
     .section-title {
       text-align: center;
       font-weight: 700;
       margin-top: 20px;
       margin-bottom: 15px;
-      color: #2c3e50;
+      color: #fff;
     }
+
     .sub-title {
       text-align: center;
       font-weight: 600;
       margin-bottom: 10px;
-      color: #34495e;
+      color: #f1f1f1;
     }
+
     .result-card {
-      background: #fefefe;
       border-radius: 0.8rem;
       padding: 1.5rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
       margin-top: 1rem;
+      color: #fff;
     }
+
     .list-group-item {
       font-size: 1.05rem;
       border: none;
-      background: #fdfdfd;
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
     }
   </style>
 </head>
@@ -110,6 +146,12 @@
         {% if not_brick %}
           <p class="text-danger fw-bold">This is not a brick. Please upload a valid brick image.</p>
         {% else %}
+          <!-- New Interpretation Line -->
+          {% set labels = ['first class brick', 'second class brick', 'third class brick', 'not a brick'] %}
+          <h5 class="mt-2">
+            This is a {{ labels[probs.index(max(probs))] }} with following properties:
+          </h5>
+
           <p><strong>Estimated Flexural Load:</strong> {{ strength }} kN</p>
           <p><strong>Estimated Water Absorption:</strong> {{ absorption }} %</p>
 
