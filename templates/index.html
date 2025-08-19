@@ -12,24 +12,49 @@
       justify-content: center;
       align-items: center;
       padding: 2rem;
-      background: #f8f9fa;
       font-family: Arial, sans-serif;
+
+      /* Background Image */
+      background: url("{{ url_for('static', filename='background.jpg') }}") no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
     }
+
+    /* Dark overlay for readability */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.4); /* adjust darkness */
+      z-index: 0;
+    }
+
+    .logo, .card, footer {
+      position: relative;
+      z-index: 1; /* keep above overlay */
+    }
+
     .logo {
-      max-width: 700px;  /* same size */
+      max-width: 700px;
       width: 100%;
       display: block;
-      margin: 20px auto; /* center horizontally */
+      margin: 20px auto;
     }
+
+    /* Glassmorphism Card */
     .card {
       max-width: 700px;
       width: 100%;
       padding: 1.5rem;
       border-radius: 1rem;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-      background: white;
-      border: none;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      background: rgba(255, 255, 255, 0.15); /* transparent white */
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #fff; /* white text to contrast */
     }
+
     .btn-custom {
       margin-right: 0.5rem;
       margin-bottom: 0.5rem;
@@ -37,20 +62,23 @@
       font-weight: 500;
       border-radius: 0.5rem;
     }
+
     footer {
       margin-top: 2rem;
       font-size: small;
-      color: #666;
+      color: #eee;
     }
+
     .heading-main {
       font-size: 1.5rem;
       font-weight: bold;
-      color: #0d6efd;
+      color: #fff;
       margin-bottom: 1rem;
     }
+
     .subtext {
       font-size: 1rem;
-      color: #555;
+      color: #f1f1f1;
       margin-bottom: 1.5rem;
     }
   </style>
