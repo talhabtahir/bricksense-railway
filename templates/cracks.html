@@ -161,11 +161,7 @@
           <img src="{{ url_for('uploaded_file', filename=fname_contours) }}" alt="Contours" class="result-img">
         </div>
       </div>
-    <!-- New Interpretation Line -->
-      <h4 class="section-title">
-        {% set labels = ['Normal brick wall', 'Cracked brick wall', 'Not a brick wall'] %}
-        This is a {{ labels[probs.index(max(probs))] }}.
-      </h4>
+    
       <h4 class="section-title">Prediction Probabilities</h4>
       <ul class="list-group text-center">
         <li class="list-group-item">
