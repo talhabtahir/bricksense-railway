@@ -7,71 +7,69 @@
   <style>
     body {
       min-height: 100vh;
+      margin: 0;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
       align-items: center;
-      padding: 2rem;
       font-family: Arial, sans-serif;
-
-      /* Background image */
-      background: url("{{ url_for('static', filename='background.jpg') }}") no-repeat center center fixed;
-      background-size: cover;
+      color: #fff;
       position: relative;
     }
-
-    /* Dark overlay (0.8 darkness) */
     body::before {
       content: "";
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.8);
-      z-index: 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url("{{ url_for('static', filename='background.png') }}") no-repeat center center/cover;
+      z-index: -2;
     }
-
-    .logo, .container {
-      position: relative;
-      z-index: 1;
+    body::after {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: -1;
     }
-
+    .container {
+      max-width: 750px;
+      width: 100%;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+      margin-top: 2rem;
+      color: #fff;
+    }
     .logo {
       max-width: 700px;
       display: block;
-      margin: 0 auto 1rem;
+      margin: 1rem auto;
     }
-
-    /* Glassmorphism Container */
-    .container {
-      max-width: 700px;
-      width: 100%;
-      padding: 2rem;
-      border-radius: 1rem;
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-      color: #fff;
-    }
-
     a.home-link {
       margin-bottom: 1rem;
       display: inline-block;
-      color: #0d6efd;
+      color: #0dcaf0;
       text-decoration: none;
+      font-weight: 500;
     }
     a.home-link:hover {
       text-decoration: underline;
     }
-
     .uploaded-img {
       max-width: 100%;
       height: auto;
       border-radius: 8px;
       margin-bottom: 1rem;
-      box-shadow: 0 0 10px rgb(0 0 0 / 0.2);
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
     }
-
     .section-title {
       text-align: center;
       font-weight: 700;
@@ -79,32 +77,36 @@
       margin-bottom: 15px;
       color: #fff;
     }
-
     .sub-title {
       text-align: center;
       font-weight: 600;
       margin-bottom: 10px;
-      color: #f1f1f1;
+      color: #e0e0e0;
     }
-
     .result-card {
+      background: rgba(255,255,255,0.1);
       border-radius: 0.8rem;
       padding: 1.5rem;
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.25);
       box-shadow: 0 2px 8px rgba(0,0,0,0.2);
       margin-top: 1rem;
-      color: #fff;
     }
-
     .list-group-item {
       font-size: 1.05rem;
       border: none;
-      background: rgba(255, 255, 255, 0.15);
+      background: transparent;
       color: #fff;
     }
+    .badge {
+      font-size: 1rem;
+      padding: 0.5rem 0.8rem;
+    }
+    .brick-label {
+      font-weight: bold;
+    }
+    .first-class { color: #28a745; }   /* Green */
+    .second-class { color: #0d6efd; }  /* Blue */
+    .third-class { color: #fd7e14; }   /* Orange */
+    .not-brick { color: #dc3545; }     /* Red */
   </style>
 </head>
 <body>
@@ -144,13 +146,9 @@
         <img src="{{ url_for('uploaded_file', filename=filename) }}" alt="Uploaded brick" class="uploaded-img">
 
         {% if not_brick %}
-          <p class="text-danger fw-bold">This is not a brick. Please upload a valid brick image.</p>
+          <p class="not-brick fw-bold">This is not a brick. Please upload a valid brick image.</p>
         {% else %}
-          <!-- New Interpretation Line -->
-          {% set labels = ['first class brick', 'second class brick', 'third class brick', 'not a brick'] %}
-          <h5 class="mt-2">
-            This is a {{ labels[probs.index(max(probs))] }} with following properties:
-          </h5>
+          <p class="fw-bold">This is a {{ predicted_class }} brick with following properties:</p>
 
           <p><strong>Estimated Flexural Load:</strong> {{ strength }} kN</p>
           <p><strong>Estimated Water Absorption:</strong> {{ absorption }} %</p>
@@ -158,20 +156,20 @@
           <h4 class="section-title">Classification Probabilities</h4>
           <ul class="list-group text-center">
             <li class="list-group-item">
-              <span class="fw-bold text-success">1st Class</span> — 
+              <span class="brick-label first-class">1st Class</span> — 
               <span class="badge bg-success rounded-pill">{{ probs[0]|round(2) }}%</span>
             </li>
             <li class="list-group-item">
-              <span class="fw-bold text-primary">2nd Class</span> — 
+              <span class="brick-label second-class">2nd Class</span> — 
               <span class="badge bg-primary rounded-pill">{{ probs[1]|round(2) }}%</span>
             </li>
             <li class="list-group-item">
-              <span class="fw-bold text-warning">3rd Class</span> — 
+              <span class="brick-label third-class">3rd Class</span> — 
               <span class="badge bg-warning rounded-pill">{{ probs[2]|round(2) }}%</span>
             </li>
             <li class="list-group-item">
-              <span class="fw-bold text-secondary">Not a Brick</span> — 
-              <span class="badge bg-secondary rounded-pill">{{ probs[3]|round(2) }}%</span>
+              <span class="brick-label not-brick">Not a Brick</span> — 
+              <span class="badge bg-danger rounded-pill">{{ probs[3]|round(2) }}%</span>
             </li>
           </ul>
         {% endif %}
