@@ -495,100 +495,66 @@ except:
 # -------------------------
 keras_model = None
 try:
-    keras_model = load_tflite_model(os.path.join(MODEL_FOLDER, "170kmodelv10_version_cam_1_float16.tflite"))
+    keras_model = tf.keras.models.load_mode(os.path.join(MODEL_FOLDER, "170kmodelv10_version_cam_1.keras"))
 except:
     traceback.print_exc()
 
 # -------------------------
 # Crack detection prediction
 # -------------------------
-# def import_and_predict_keras(pil_image, sensitivity=9):
-#     try:
-#         original_img = np.array(pil_image.convert("RGB"))
-#         if original_img.shape[-1] == 4:
-#             original_img = cv2.cvtColor(original_img, cv2.COLOR_RGBA2RGB)
-
-#         orig_height, orig_width, _ = original_img.shape
-#         contour_thickness = max(2, int(max(orig_width, orig_height) / 200))
-
-#         img_resized = cv2.resize(original_img, (224, 224))
-#         img_tensor = np.expand_dims(img_resized, axis=0) / 255.0
-
-#         custom_model = Model(inputs=keras_model.inputs,
-#                              outputs=(keras_model.layers[sensitivity].output, keras_model.layers[-1].output))
-#         conv_out, pred_vec = custom_model.predict(img_tensor)
-#         conv_out = np.squeeze(conv_out)
-
-#         pred_idx = int(np.argmax(pred_vec))
-
-#         heat_map_resized = cv2.resize(conv_out, (orig_width, orig_height), interpolation=cv2.INTER_LINEAR)
-#         heat_map = np.mean(heat_map_resized, axis=-1)
-#         heat_map = np.maximum(heat_map, 0)
-#         if heat_map.max() != 0:
-#             heat_map = heat_map / heat_map.max()
-
-#         threshold = 0.5
-#         heat_map_thresh = np.uint8(255 * heat_map)
-#         _, thresh_map = cv2.threshold(heat_map_thresh, int(255 * threshold), 255, cv2.THRESH_BINARY)
-#         contours, _ = cv2.findContours(thresh_map, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-#         heatmap_colored = np.uint8(255 * cm.jet(heat_map)[:, :, :3])
-#         heatmap_image = Image.fromarray(heatmap_colored)
-
-#         contoured_img = original_img.copy()
-#         if contours:
-#             cv2.drawContours(contoured_img, contours, -1, (0, 0, 255), contour_thickness)
-#         contoured_image = Image.fromarray(contoured_img)
-
-#         heatmap_overlay = Image.blend(Image.fromarray(original_img).convert("RGBA"),
-#                                       heatmap_image.convert("RGBA"), alpha=0.5).convert("RGB")
-#         heatmap_overlay_np = np.array(heatmap_overlay)
-#         if contours:
-#             cv2.drawContours(heatmap_overlay_np, contours, -1, (0, 0, 0), contour_thickness)
-#         overlay_img = Image.fromarray(heatmap_overlay_np)
-
-#         image_with_border = add_white_border(pil_image, 10)
-#         contours_with_border = add_white_border(overlay_img, 10)
-
-#         return pred_vec, image_with_border, contours_with_border, heatmap_image, contoured_image, overlay_img
-#     except Exception as e:
-#         print("Error in import_and_predict_keras:", e)
-#         return None, None, None, None, None, None
-def run_tflite_crack_detection(interpreter, pil_image, sensitivity=9):
+def import_and_predict_keras(pil_image, sensitivity=9):
     try:
-        # Preprocess image
-        img = pil_image.resize((224, 224))
-        img_array = np.array(img).astype(np.float32) / 255.0
-        img_tensor = np.expand_dims(img_array, axis=0)
+        original_img = np.array(pil_image.convert("RGB"))
+        if original_img.shape[-1] == 4:
+            original_img = cv2.cvtColor(original_img, cv2.COLOR_RGBA2RGB)
 
-        # Get input/output details
-        input_details = interpreter.get_input_details()
-        output_details = interpreter.get_output_details()
+        orig_height, orig_width, _ = original_img.shape
+        contour_thickness = max(2, int(max(orig_width, orig_height) / 200))
 
-        # Set input tensor
-        interpreter.set_tensor(input_details[0]['index'], img_tensor)
-        interpreter.invoke()
+        img_resized = cv2.resize(original_img, (224, 224))
+        img_tensor = np.expand_dims(img_resized, axis=0) / 255.0
 
-        # Get output
-        output_data = interpreter.get_tensor(output_details[0]['index'])  # shape: (1, num_classes)
-        pred_vec = output_data[0]
+        custom_model = Model(inputs=keras_model.inputs,
+                             outputs=(keras_model.layers[sensitivity].output, keras_model.layers[-1].output))
+        conv_out, pred_vec = custom_model.predict(img_tensor)
+        conv_out = np.squeeze(conv_out)
+
         pred_idx = int(np.argmax(pred_vec))
 
-        # Simple heatmap simulation (optional, can skip heavy conv operations)
-        heatmap = np.ones((224, 224)) * (pred_vec[pred_idx])  # fake heatmap
-        heatmap_img = Image.fromarray(np.uint8(heatmap * 255)).convert("RGB")
+        heat_map_resized = cv2.resize(conv_out, (orig_width, orig_height), interpolation=cv2.INTER_LINEAR)
+        heat_map = np.mean(heat_map_resized, axis=-1)
+        heat_map = np.maximum(heat_map, 0)
+        if heat_map.max() != 0:
+            heat_map = heat_map / heat_map.max()
 
-        # For visualization
-        cont_img = pil_image.copy()
-        overlay_img = pil_image.copy()
-        img_border = add_white_border(pil_image, 10)
-        cont_border = add_white_border(overlay_img, 10)
+        threshold = 0.5
+        heat_map_thresh = np.uint8(255 * heat_map)
+        _, thresh_map = cv2.threshold(heat_map_thresh, int(255 * threshold), 255, cv2.THRESH_BINARY)
+        contours, _ = cv2.findContours(thresh_map, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-        return pred_vec, img_border, cont_border, heatmap_img, cont_img, overlay_img
+        heatmap_colored = np.uint8(255 * cm.jet(heat_map)[:, :, :3])
+        heatmap_image = Image.fromarray(heatmap_colored)
 
+        contoured_img = original_img.copy()
+        if contours:
+            cv2.drawContours(contoured_img, contours, -1, (0, 0, 255), contour_thickness)
+        contoured_image = Image.fromarray(contoured_img)
+
+        heatmap_overlay = Image.blend(Image.fromarray(original_img).convert("RGBA"),
+                                      heatmap_image.convert("RGBA"), alpha=0.5).convert("RGB")
+        heatmap_overlay_np = np.array(heatmap_overlay)
+        if contours:
+            cv2.drawContours(heatmap_overlay_np, contours, -1, (0, 0, 0), contour_thickness)
+        overlay_img = Image.fromarray(heatmap_overlay_np)
+
+        image_with_border = add_white_border(pil_image, 10)
+        contours_with_border = add_white_border(overlay_img, 10)
+
+        return pred_vec, image_with_border, contours_with_border, heatmap_image, contoured_image, overlay_img
     except Exception as e:
-        print("Error in TFLite crack detection:", e)
+        print("Error in import_and_predict_keras:", e)
         return None, None, None, None, None, None
+
 # -------------------------
 # Routes
 # -------------------------
@@ -676,8 +642,8 @@ def cracks():
             return render_template("cracks.html", filename=filename, error="Model missing")
 
         try:
-            preds, img_border, cont_border, heatmap_img, cont_img, overlay_img = run_tflite_crack_detection(
-                keras_model, pil_img, sensitivity=sensitivity)
+            preds, img_border, cont_border, heatmap_img, cont_img, overlay_img = import_and_predict_keras(
+                pil_img, sensitivity=sensitivity)
 
             if preds is None:
                 flash("Prediction failed.")
