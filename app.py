@@ -495,7 +495,7 @@ except:
 # -------------------------
 keras_model = None
 try:
-    keras_model = tf.keras.models.load_mode(os.path.join(MODEL_FOLDER, "170kmodelv10_version_cam_1.keras"))
+    keras_model = tf.keras.models.load_model(os.path.join(MODEL_FOLDER, "170kmodelv10_version_cam_1.keras"))
 except:
     traceback.print_exc()
 
