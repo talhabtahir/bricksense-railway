@@ -677,7 +677,8 @@ def cracks():
 
         try:
             preds, img_border, cont_border, heatmap_img, cont_img, overlay_img = run_tflite_crack_detection(
-                pil_img, sensitivity=sensitivity)
+                keras_model, pil_img, sensitivity=sensitivity)
+
             if preds is None:
                 flash("Prediction failed.")
                 return render_template("cracks.html", filename=filename, error="Prediction failed")
