@@ -495,10 +495,12 @@ except:
 # -------------------------
 keras_model = None
 try:
-    keras_model = tf.keras.models.load_model(os.path.join(MODEL_FOLDER, "170kmodelv10_version_cam_1.keras"))
-except:
+    keras_model = tf.keras.models.load_model(
+        os.path.join(MODEL_FOLDER, "170kmodelv10_version_cam_1.keras")
+    )
+except Exception as e:
+    print("Failed to load keras model:", e)
     traceback.print_exc()
-
 # -------------------------
 # Crack detection prediction
 # -------------------------
