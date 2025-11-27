@@ -665,11 +665,11 @@ def cracks():
                                    filename=filename,
                                    probs=probs,
                                    predicted_class=predicted_class,
-                                   fname_border=save_pil(img_border, "orig"),
-                                   fname_contours=save_pil(cont_border, "contours"),
-                                   fname_heatmap=save_pil(heatmap_img, "heatmap"),
-                                   fname_contoured=save_pil(cont_img, "contoured"),
-                                   fname_overlay=save_pil(overlay_img, "overlay"))
+                                   fname_border=save_pil(img_border, "orig"))
+                                   # fname_contours=save_pil(cont_border, "contours"),
+                                   # fname_heatmap=save_pil(heatmap_img, "heatmap"),
+                                   # fname_contoured=save_pil(cont_img, "contoured"),
+                                   # fname_overlay=save_pil(overlay_img, "overlay"))
         except Exception as e:
             flash(f"Error processing image: {e}")
             return render_template("cracks.html", filename=filename, error=str(e))
