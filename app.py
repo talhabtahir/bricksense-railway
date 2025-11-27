@@ -552,7 +552,7 @@ def import_and_predict_keras(pil_image, sensitivity=9):
         image_with_border = add_white_border(pil_image, 10)
         contours_with_border = add_white_border(overlay_img, 10)
 
-        return pred_vec, image_with_border, contours_with_border, heatmap_image, contoured_image, overlay_img
+        return pred_vec, image_with_border, contours_with_border#, heatmap_image, contoured_image, overlay_img
     except Exception as e:
         print("Error in import_and_predict_keras:", e)
         return None, None, None, None, None, None
@@ -644,8 +644,8 @@ def cracks():
             return render_template("cracks.html", filename=filename, error="Model missing")
 
         try:
-            preds, img_border, cont_border, heatmap_img, cont_img, overlay_img = import_and_predict_keras(
-                pil_img, sensitivity=sensitivity)
+            preds, img_border, cont_border import_and_predict_keras(
+                pil_img, sensitivity=sensitivity)#, heatmap_img, cont_img, overlay_img = import_and_predict_keras(
 
             if preds is None:
                 flash("Prediction failed.")
@@ -665,8 +665,8 @@ def cracks():
                                    filename=filename,
                                    probs=probs,
                                    predicted_class=predicted_class,
-                                   fname_border=save_pil(img_border, "orig"))
-                                   # fname_contours=save_pil(cont_border, "contours"),
+                                   fname_border=save_pil(img_border, "orig"),
+                                   fname_contours=save_pil(cont_border, "contours"))
                                    # fname_heatmap=save_pil(heatmap_img, "heatmap"),
                                    # fname_contoured=save_pil(cont_img, "contoured"),
                                    # fname_overlay=save_pil(overlay_img, "overlay"))
