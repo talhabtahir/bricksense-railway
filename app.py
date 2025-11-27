@@ -555,7 +555,7 @@ def import_and_predict_keras(pil_image, sensitivity=9):
         return pred_vec, image_with_border, contours_with_border#, heatmap_image, contoured_image, overlay_img
     except Exception as e:
         print("Error in import_and_predict_keras:", e)
-        return None, None, None, None, None, None
+        return None, None, None#, None, None, None
 
 # -------------------------
 # Routes
