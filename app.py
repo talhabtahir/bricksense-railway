@@ -644,7 +644,7 @@ def cracks():
             return render_template("cracks.html", filename=filename, error="Model missing")
 
         try:
-            preds, img_border, cont_border import_and_predict_keras(
+            preds, img_border, cont_border = import_and_predict_keras(
                 pil_img, sensitivity=sensitivity)#, heatmap_img, cont_img, overlay_img = import_and_predict_keras(
 
             if preds is None:
